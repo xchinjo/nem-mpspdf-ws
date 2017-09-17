@@ -24,6 +24,8 @@ Post Parameter format:
 {"senderPrivateKey":"<>","recepientPublicKey":"<>","accountNumber":"<bank account number>","swiftMessage":"<Swift>"}
 ```
 
+Output: Transaction Hash
+
 <h3>Decode Swift Message Transaction</h3>
 
 Method: POST  
@@ -34,4 +36,5 @@ Post Parameter format:
 {"senderPrivateKey":"<>","recepientPublicKey":"<>","hash":"<transaction hash>"}
 ```
 
+Output: Decoded Transaction Message (Swift Message)
 <sub>Copyright (c) 2017</sub>
