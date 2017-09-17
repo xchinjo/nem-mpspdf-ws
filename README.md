@@ -36,5 +36,6 @@ Post Parameter format:
 {"senderPrivateKey":"<>","recepientPublicKey":"<>","hash":"<transaction hash>"}
 ```
 
-Output: Decoded Transaction Message (Swift Message)
+Output: Decoded Transaction Message (Swift Message)  
+
 <sub>Copyright (c) 2017</sub>
