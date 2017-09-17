@@ -36,22 +36,22 @@ ConfigurationBuilder.nodeNetworkName("mijinnet").nodeNetworkProtocol("http")
 		
 <h3>Create Swift Message MultisigTransaction</h3>
 
+```bash
 Method: POST  
 Endpoint URL: mpmsf/transaction/transfer/multisig/announce
 
 Post Parameter format:
-```bash
 
 {"multisigPrivateKey":"<multisig account private key>","senderPrivateKey":"<sender private key>","recepientPublicKey":"<recepient public key>","accountNumber":"<bank account number>","swiftMessage":"<Swift>"}
 ```
 
 <h3>Cosign a Swift Message MultisigTransaction</h3>
 
+```bash
 Method: POST  
 Endpoint URL: mpmsf/transaction/transfer/multisig/cosign
 
 Post Parameter format:
-```bash
 
 {"signers":[{"<signer private key1>","<signer private key2>"},"multisigHash":"<multisig hash>","multisigPublicKey":"<multisig account public key>"}
 ```
@@ -59,11 +59,11 @@ Post Parameter format:
 Output: Transaction Hash		
 <h3>Create Swift Message Transaction</h3>
 
+```bash
 Method: POST  
 Endpoint URL: mpmsf/transaction/transfer/announce 
 
 Post Parameter format:
-```bash
 
 {"senderPrivateKey":"<sender private key>","recepientPublicKey":"<recepient public key>","accountNumber":"<bank account number>","swiftMessage":"<Swift>"}
 ```
@@ -72,11 +72,12 @@ Output: Transaction Hash
 
 <h3>Decode Swift Message Transaction</h3>
 
+```bash
 Method: POST  
 Endpoint URL: mpmsf/transaction/hash/decode
 
 Post Parameter format:
-```bash
+
 {"senderPrivateKey":"<sender private key>","recepientPublicKey":"<recepient public key>","hash":"<transaction hash>"}
 ```
 
