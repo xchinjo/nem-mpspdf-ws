@@ -86,7 +86,9 @@ Output: Decoded Transaction Message (Swift Message)
 The project is a Spring Boot Web Service Project. It can be excuted by running the spring boot command to bring up the embedded tomcat. 
 
 <h3>Build and Deploy</h3>
+
 ```bash
 mvn clean install
 ```
+
 <sub>Copyright (c) 2017</sub>
