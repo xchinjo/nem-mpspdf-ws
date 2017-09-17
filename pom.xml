@@ -5,6 +5,7 @@
 	<artifactId>nem-mpspdf-ws</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -18,7 +19,7 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- NEM + IPFS Core Dependencies -->
+		<!-- NEMAPPS Libs -->
 		<dependency>
 			<groupId>io.nem.apps</groupId>
 			<artifactId>nem-apps-lib</artifactId>
@@ -32,12 +33,9 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
-
-
 	<build>
 		<plugins>
 			<plugin>

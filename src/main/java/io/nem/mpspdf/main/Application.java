@@ -2,6 +2,7 @@ package io.nem.mpspdf.main;
 
 import java.util.Arrays;
 
+import org.nem.core.model.TransactionFeeCalculatorAfterFork;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,11 +11,19 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
+import io.nem.apps.builders.ConfigurationBuilder;
+
 @SpringBootApplication
-@ComponentScan(basePackages="io.nem.mpspdf.service")
+@ComponentScan(basePackages="io.nem.mpspdfs.service")
 public class Application {
 
 	public static void main(String[] args) {
+		
+		ConfigurationBuilder.nodeNetworkName("mijinnet").nodeNetworkProtocol("http")
+		.nodeNetworkUri("a1.dfintech.com").nodeNetworkPort("7895")
+		.setup();
+		
+		
 		SpringApplication.run(Application.class, args);
 	}
 	

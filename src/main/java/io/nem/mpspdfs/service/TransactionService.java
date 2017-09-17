@@ -3,13 +3,18 @@ package io.nem.mpspdfs.service;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import org.nem.core.crypto.Hash;
 import org.nem.core.crypto.KeyPair;
 import org.nem.core.crypto.PrivateKey;
 import org.nem.core.crypto.PublicKey;
 import org.nem.core.messages.SecureMessage;
 import org.nem.core.model.Account;
+import org.nem.core.model.HashUtils;
 import org.nem.core.model.TransferTransaction;
 import org.nem.core.model.ncc.NemAnnounceResult;
+import org.nem.core.serialization.JsonSerializer;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,8 +38,8 @@ import io.nem.mpspdf.paramobj.SwiftTransactionParameter;
 @CrossOrigin(origins = { "http://localhost:4200", "http://alvinpreyes.com", "http://arcabots.com" })
 public class TransactionService {
 
-	@RequestMapping(method = RequestMethod.POST, path = "/transfer")
-	public String sendTransaction(@RequestBody SwiftTransactionParameter request) {
+	@RequestMapping(method = RequestMethod.POST, path = "/transfer/announce")
+	public ResponseEntity<String> sendTransaction(@RequestBody SwiftTransactionParameter request) {
 
 		final Account senderAccount = new Account(new KeyPair(PrivateKey.fromHexString(request.getSenderPrivateKey())));
 		final Account recipientAccount = new Account(
@@ -54,8 +59,8 @@ public class TransactionService {
 					.recipient(recipientAccount)
 					.attachment(AttachmentFactory.createTransferTransactionAttachment(message))
 					.buildAndSendTransaction(); // build and send it!
-
-			return JsonUtils.toJson(nemAnnounceResult);
+			
+			return ResponseEntity.accepted().body(nemAnnounceResult.getTransactionHash().toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -64,20 +69,24 @@ public class TransactionService {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST, path = "/transfer/decode")
+	@RequestMapping(method = RequestMethod.POST, path = "/hash/decode")
 	public SwiftTransferTransaction decodeTransaction(@RequestBody SwiftTransactionDecodeParameter request) {
 
-		final Account senderAccount = new Account(new KeyPair(PublicKey.fromHexString(request.getSenderPublicKey())));
-		final Account recipientAccount = new Account(
-				new KeyPair(PrivateKey.fromHexString(request.getReceipientPrivateKey())));
+		final KeyPair senderAccount = new KeyPair(PublicKey.fromHexString(request.getSenderPublicKey()));
+		final KeyPair recipientAccount = 
+				new KeyPair(PrivateKey.fromHexString(request.getReceipientPrivateKey()));
+		
+		
 
 		try {
 
 			TransferTransaction transaction = (TransferTransaction) TransactionApi.getTransaction(request.getHash())
 					.getEntity();
 
+	
 			String decode = SecureMessageDecoder.decode(senderAccount, recipientAccount,
-					transaction.getMessage().getEncodedPayload());
+					transaction.getAttachment().getMessage().getEncodedPayload());
+			
 			String decodedDecompressed = GzipUtils.decompress(decode.getBytes());
 
 			return JsonUtils.fromJson(decodedDecompressed, SwiftTransferTransaction.class);
@@ -87,6 +96,32 @@ public class TransactionService {
 		}
 		return null;
 
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, path = "/hello/sample")
+	public ResponseEntity<String> sampleHello() {
+		
+		final Account senderAccount = new Account(new KeyPair(PrivateKey.fromHexString("90951d4f876e3a15b8507532a051857e933a87269bc0da7400d1604bedc93aec")));
+		final Account recipientAccount = new Account(
+				new KeyPair(PublicKey.fromHexString("8043f36622be5c91e00d9977c870935c887ff9050ba0a62207db76dba1a87385")));
+		
+		SecureMessage message = null;
+		try {
+			message = SecureMessageEncoder.encode(senderAccount, recipientAccount,
+					GzipUtils.compress(JsonUtils.toJson("hello")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		NemAnnounceResult nemAnnounceResult = TransferTransactionBuilder.sender(senderAccount)
+				.recipient(recipientAccount)
+				.attachment(AttachmentFactory.createTransferTransactionAttachment(message))
+				.buildAndSendTransaction(); // build and send it!
+
+		;
+		return ResponseEntity.status(401).body(nemAnnounceResult.getTransactionHash().toString());
 	}
 
 }
