@@ -7,9 +7,9 @@ A sample web service app written using Spring Boot to showcase sending a Swift T
 Go to Application.java to set the configuration.
 
 ```java
-	ConfigurationBuilder.nodeNetworkName("mijinnet").nodeNetworkProtocol("http")
-	.nodeNetworkUri("a1.dfintech.com").nodeNetworkPort("7895")
-	.setup();
+ConfigurationBuilder.nodeNetworkName("mijinnet").nodeNetworkProtocol("http")
+.nodeNetworkUri("a1.dfintech.com").nodeNetworkPort("7895")
+.setup();
 ```
 		
 		
