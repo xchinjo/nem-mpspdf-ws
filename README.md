@@ -54,9 +54,10 @@ Endpoint URL: mpmsf/transaction/transfer/multisig/cosign
 Post Parameter format:
 
 {"signers":[{"<signer private key1>","<signer private key2>"},"multisigHash":"<multisig hash>","multisigPublicKey":"<multisig account public key>"}
+
+Output: Transaction Hash	
 ```
 
-Output: Transaction Hash		
 <h3>Create Swift Message Transaction</h3>
 
 ```bash
@@ -66,9 +67,9 @@ Endpoint URL: mpmsf/transaction/transfer/announce
 Post Parameter format:
 
 {"senderPrivateKey":"<sender private key>","recepientPublicKey":"<recepient public key>","accountNumber":"<bank account number>","swiftMessage":"<Swift>"}
-```
 
 Output: Transaction Hash
+```
 
 <h3>Decode Swift Message Transaction</h3>
 
