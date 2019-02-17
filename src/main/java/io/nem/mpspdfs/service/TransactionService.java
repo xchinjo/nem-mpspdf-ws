@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.nem.apps.api.AccountApi;
 import io.nem.apps.api.TransactionApi;
 import io.nem.apps.builders.MultisigSignatureTransactionBuilder;
 import io.nem.apps.builders.MultisigTransactionBuilder;
@@ -38,12 +40,59 @@ import io.nem.mpspdf.paramobj.MultisigSwiftTransactionCosignParameter;
 import io.nem.mpspdf.paramobj.MultisigSwiftTransactionParameter;
 import io.nem.mpspdf.paramobj.SwiftTransactionDecodeParameter;
 import io.nem.mpspdf.paramobj.SwiftTransactionParameter;
+import io.nem.utils.StringUtil;
 
 @RestController
 @RequestMapping("/transaction")
 @EnableAsync
-@CrossOrigin(origins = { "http://localhost:4200", "http://alvinpreyes.com", "http://arcabots.com" })
+//@CrossOrigin(origins = { "http://localhost:4200", "http://alvinpreyes.com", "http://arcabots.com" })
 public class TransactionService {
+
+
+	@RequestMapping(path = "/sample")
+	public ResponseEntity<String> Sample() {
+		try {
+
+
+
+			return ResponseEntity.accepted().body("hello world");
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+		return null;
+
+	}
+
+
+	@RequestMapping(path = "/getbalance")
+	public ResponseEntity<String> getBalance() {
+		String ACCOUNT = "b6953d95523fccf1055c8252cf59bd3f452668a312df5009e3a9687f8acac78c";
+		String DST_ADRESS ="NAAZ2X-CP7JGG-NNM2BH-ZVYOHH-JBUET5-KGTWBW-M3AF";
+		try {
+			String res="";
+			//List<TransactionMetaDataPair> tlist;
+			//AccountApi.getAllTransactions(StringUtil.sanityzer(DST_ADRESS)).ArrayList;
+			//list = array(AccountApi.getAllTransactions(StringUtil.sanityzer(DST_ADRESS)));
+			//AccountApi.getAllTransactions(StringUtil.sanityzer(DST_ADRESS)).
+			//res = AccountApi.getAllTransactions(StringUtil.sanityzer(DST_ADRESS)).getEntity().toString();
+			//res = AccountApi.getAccountByAddress(StringUtil.sanityzer(DST_ADRESS)).getEntity().getBalance().toString();
+
+			
+
+		return new ResponseEntity<>(
+			res, 
+			HttpStatus.OK);
+
+
+
+		}catch(Exception e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		}			
+
+
+	}	
+
 
 	@RequestMapping(method = RequestMethod.POST, path = "/transfer/multisig/announce")
 	public ResponseEntity<String> sendMultisigTransaction(@RequestBody MultisigSwiftTransactionParameter request) {
@@ -66,7 +115,7 @@ public class TransactionService {
 
 			TransferTransaction transferTransaction = TransferTransactionBuilder.sender(multisigAccount)
 					.recipient(recipientAccount)
-					.attachment(AttachmentFactory.createTransferTransactionAttachment(message)).buildTransaction();
+					.attachment(AttachmentFactory.createTransferTransactionAttachmentMessage(message)).buildTransaction();
 
 			NemAnnounceResult nemAnnounceResult = MultisigTransactionBuilder.sender(senderAccount)
 					.otherTransaction(transferTransaction).buildAndSendMultisigTransaction();
@@ -118,7 +167,7 @@ public class TransactionService {
 
 			NemAnnounceResult nemAnnounceResult = TransferTransactionBuilder.sender(senderAccount)
 					.recipient(recipientAccount)
-					.attachment(AttachmentFactory.createTransferTransactionAttachment(message))
+					.attachment(AttachmentFactory.createTransferTransactionAttachmentMessage(message))
 					.buildAndSendTransaction(); // build and send it!
 
 			return ResponseEntity.accepted().body(nemAnnounceResult.getTransactionHash().toString());
@@ -173,7 +222,7 @@ public class TransactionService {
 		}
 
 		NemAnnounceResult nemAnnounceResult = TransferTransactionBuilder.sender(senderAccount)
-				.recipient(recipientAccount).attachment(AttachmentFactory.createTransferTransactionAttachment(message))
+				.recipient(recipientAccount).attachment(AttachmentFactory.createTransferTransactionAttachmentMessage(message))
 				.buildAndSendTransaction(); // build and send it!
 
 		;
